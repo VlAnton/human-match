@@ -1,24 +1,13 @@
 from django.db import models
 
-
-class HumanMixin:
-    """"""
-
-    SEXES = (
-        ('Man', 'Man'),
-        ('Woman', 'Woman'),
-    )
-    first_name = models.CharField(max_length=50)
-    second_name = models.CharField(max_length=50)
-    age = models.PositiveIntegerField()
-    gender = models.CharField(max_length=10, choices=SEXES)
+from match.models import Match
 
 
-class Human(HumanMixin, models.Model):
-    """"""
+class Human(Match):
 
-    avatar = models.ImageField('Avatar')
+    avatar = models.ImageField('Avatar', null=True)
 
     class Meta:
+        db_table = 'human'
         verbose_name = 'Human'
         verbose_name_plural = 'Humans'
