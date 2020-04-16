@@ -3,6 +3,7 @@ import faker
 import pytest
 
 from django.conf import settings
+from rest_framework.test import APIClient
 
 from human.models import Human
 
@@ -22,10 +23,17 @@ def get_human_data():
     )
 
 
+
 @pytest.fixture
-def humans_env():
+def apiclient():
+    return APIClient()
+
+
+@pytest.fixture
+def humans():
     humans = []
     for _ in range(5):
         human_data = get_human_data()
         humans.append(Human(**human_data))
     Human.objects.bulk_create(humans)
+    return Human.objects.all()
