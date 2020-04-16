@@ -11,11 +11,15 @@ class HumanViewSet(ViewSet):
     http_method_names = ['get', 'post', 'put', 'delete']
     serializer_class = HumanSerializer
 
-    def _get_response_data(self, pk):
+    def _get_response_data(self, pk) -> ('human.Human' or dict, int):
+        """
+        Возвращает данные для ответа.
+        Если сущность существует, возвращается сущность, иначе — текст ошибки.
+        """
         try:
             instance = Human.objects.get(pk=pk)
-        except Exception as ex:
-            return {'error': str(ex)}, statuses.HTTP_400_BAD_REQUEST
+        except Human.DoesNotExist as ex:
+            return {'error': str(ex)}, statuses.HTTP_404_NOT_FOUND
         else:
             return instance, statuses.HTTP_200_OK
 
@@ -24,9 +28,9 @@ class HumanViewSet(ViewSet):
 
     def retreive(self, request, pk):
         data, status = self._get_response_data(pk)
-        if status != statuses.HTTP_200_OK:
-            return Response(data, status)
-        return Response(data.jsonify(), status)
+        if status == statuses.HTTP_200_OK:
+            data = data.jsonify()
+        return Response(data, status)
 
     def delete(self, request, pk):
         instance, status = self._get_response_data(pk)
@@ -39,26 +43,27 @@ class HumanViewSet(ViewSet):
 
     def change(self, request, pk):
         data, status = self._get_response_data(pk)
-        if status == statuses.HTTP_400_BAD_REQUEST:
+        if status != statuses.HTTP_200_OK:
             return Response(data, status)
 
         instance = data
         serializer = self.serializer_class(instance=instance, data=request.data, partial=True)
         if not serializer.is_valid():
             return Response(serializer.errors, status=statuses.HTTP_400_BAD_REQUEST)
+
         try:
-            serializer.save()
-        except Exception as ex:
+            instance = serializer.save()
+        except AssertionError as ex:
             return Response({'error': str(ex)})
         else:
             instance_data = instance.jsonify()
-            instance_data.update(serializer.validated_data)
             return Response(instance_data, status=statuses.HTTP_200_OK)
 
     def create(self, request):
         serializer = self.serializer_class(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=statuses.HTTP_400_BAD_REQUEST)
+
         try:
             instance = serializer.save()
         except AssertionError as ex:

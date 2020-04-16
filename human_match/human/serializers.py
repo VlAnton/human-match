@@ -4,8 +4,6 @@ from human.models import Human
 
 
 class HumanSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Human
-        fields = ('__all__')
-        exclude = ('id')
+        exclude = ('id',)

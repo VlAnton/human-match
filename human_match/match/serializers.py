@@ -1,16 +1,16 @@
 from rest_framework import serializers
 
-from human.models import Human, Match
+from match.models import Match
+from human.models import Human
 
 
 class MatchSerializer(serializers.ModelSerializer):
-
     human = serializers.SerializerMethodField()
 
     class Meta:
         model = Match
         fields = ('__all__')
-        exlude = ('id')
 
-    def get_human(self, obj):
-        return Human.objects.get(id=obj.id).jsonify()
+    def get_human(self, obj) -> 'dict':
+        """Возвращает данные о рандомном пользователе."""
+        return Human.objects.random().jsonify()
