@@ -28,4 +28,5 @@ python manage.py runserver
 ## Запуск тестов
 
 ```bash
-pytest```
+pytest
+```
