@@ -23,3 +23,9 @@ python manage.py runserver
 ### Match app
 `match/` — получение списка Match c вложенным Human  
 `match/<int:human_id>` — получение Match для данного human_id  
+
+
+## Запуск тестов
+
+```bash
+pytest```
