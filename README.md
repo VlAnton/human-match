@@ -13,13 +13,13 @@ python manage.py runserver
 ## Приложения
 
 ### Human app
-`human/` — список существующих Human
-`human/create` — создание Human
-`human/<int:pk>` — получение данных по Human
-`human/<int:pk>/change` — изменение Human
-`human/<int:pk>/delete` — удаление Human
+`human/` — список существующих Human  
+`human/create` — создание Human  
+`human/<int:pk>` — получение данных по Human  
+`human/<int:pk>/change` — изменение Human  
+`human/<int:pk>/delete` — удаление Human  
 
 
 ### Match app
-`match/` — получение списка Match c вложенным Human
-`match/<int:human_id>` — получение Match для данного human_id
+`match/` — получение списка Match c вложенным Human  
+`match/<int:human_id>` — получение Match для данного human_id  
